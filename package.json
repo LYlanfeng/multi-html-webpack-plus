@@ -3,10 +3,17 @@
   "version": "0.2.0",
   "description": "一个基于html-webpack-plugin,以及vue-cli3扩展的多页构建插件",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LYlanfeng/multi-html-webpack-plus.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "webpack",
+    "plugin",
+    "html",
     "vue-cli3.x",
     "html-webpack-plugin"
   ],
