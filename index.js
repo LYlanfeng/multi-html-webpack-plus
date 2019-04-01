@@ -1,3 +1,4 @@
+
 const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
@@ -7,7 +8,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 const srcDir = resolve('src')
-const appDir = path.resolve(srcDir, 'pages')
+let appDir = path.resolve(srcDir, 'pages')
 const addPage = function (files, filePath) {
   const entry = filePath.replace(__dirname, '').substring(1).replace(/\\/g, '/')
   const jsName = entry.substring(entry.indexOf('pages') + 6)
@@ -37,6 +38,16 @@ const getPages = (p = appDir) => {
     }
   })
   return files
+}
+const DEFAULT_OPTIONS = {
+
+}
+const autoScan = (options) => {
+  const opt = _.extend({}, DEFAULT_OPTIONS, options)
+  if (opt.appDir) {
+    appDir = path.resolve(srcDir, opt.appDir)
+  }
+  return getPages()
 }
 
 function MultiHtmlWebpackPlus () {}
@@ -92,5 +103,5 @@ MultiHtmlWebpackPlus.prototype.apply = function (compiler) {
   })
 }
 MultiPagesUtil.MultiHtmlWebpackPlus = MultiHtmlWebpackPlus
-MultiPagesUtil.autoScan = getPages()
+MultiPagesUtil.autoScan = autoScan
 module.exports = MultiPagesUtil

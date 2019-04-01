@@ -1,6 +1,6 @@
 {
   "name": "multi-html-webpack-plus",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "一个基于html-webpack-plugin,以及vue-cli3扩展的多页构建插件",
   "main": "index.js",
   "repository": {
