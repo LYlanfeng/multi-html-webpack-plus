@@ -1,4 +1,3 @@
-
 const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
@@ -67,9 +66,15 @@ MultiHtmlWebpackPlus.prototype.apply = function (compiler) {
         assets.js = assets.js.map(v => {
           return hierarchyEntry + v
         })
+        assets.css = assets.css.map(v => {
+          return hierarchyEntry + v
+        })
         const chunks = assets.chunks
         for (let key in chunks) {
           chunks[key].entry = hierarchyEntry + chunks[key].entry
+          chunks[key].css = chunks[key].css.map(v => {
+            return hierarchyEntry + v
+          })
         }
       }
       htmlPluginData.assets = assets
@@ -80,19 +85,18 @@ MultiHtmlWebpackPlus.prototype.apply = function (compiler) {
     })
     compilation.plugin('html-webpack-plugin-alter-asset-tags', function (htmlPluginData) {
       const assetTags = htmlPluginData
+      const fileName = assetTags.plugin.options.filename
+      const hierarchy = fileName.split('/').length - 1
+      let hierarchyEntry = []
+      for (let i = 0; i < hierarchy; i++) {
+        hierarchyEntry.push('../')
+      }
+      hierarchyEntry = hierarchyEntry.join('')
       assetTags.head.forEach(v => {
         if (v.attributes.as === 'script') {
-          let href = v.attributes.href.split('/')
-          let headName = ''
-          if (href.length > 0) {
-            headName = href[href.length - 1]
-          }
-          const index = _.findIndex(assetTags.body, v => {
-            return v.attributes.src.indexOf(headName)
-          })
-          if (index !== -1) {
-            v.attributes.href = assetTags.body[index].attributes.src
-          }
+          v.attributes.href = hierarchyEntry + v.attributes.href
+        } else if (v.attributes.as === 'style') {
+          v.attributes.href = hierarchyEntry + v.attributes.href
         }
       })
       return Promise.resolve()
