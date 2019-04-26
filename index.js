@@ -3,13 +3,17 @@ const fs = require('fs')
 const _ = require('lodash')
 const MultiPagesUtil = {}
 
+function resolveProjectPath(){
+  return path.join(__dirname, '../../')
+}
+
 function resolve (dir) {
-  return path.join(__dirname, dir)
+  return path.join(__dirname, '../../', dir)
 }
 const srcDir = resolve('src')
 let appDir = path.resolve(srcDir, 'pages')
 const addPage = function (files, filePath) {
-  const entry = filePath.replace(__dirname, '').substring(1).replace(/\\/g, '/')
+  const entry = filePath.replace(resolveProjectPath(), '').replace(/\\/g, '/')
   const jsName = entry.substring(entry.indexOf('pages') + 6)
   const template = entry.replace(/js$/, 'html')
   const filename = template.substring(template.indexOf('src/') + 4)
